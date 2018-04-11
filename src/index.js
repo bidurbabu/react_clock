@@ -20,7 +20,6 @@ function LocalTime(props) {
     </div>
   )
 }
-
 function AnalogClock(props) {
   const secondsAngle = 2 * Math.PI * props
     .date
@@ -44,13 +43,16 @@ function AnalogClock(props) {
     'strokeWidth': '5'
   };
   const cc = {
-    'cx': '50',
-    'cy': '50',
-    'radius': '45'
+    'cx': '77',
+    'cy': '77',
+    'radius': '75'
   };
   const secondsRadius = 45;
   const minutesRadius = 40;
   const hourRadius = 30;
+  const numberRadius = 60;
+  const numberXAdjust = -5;
+  const numberYAdjust = 5;
   const secondsNiddle = {
     'x1': cc.cx,
     'y1': cc.cy,
@@ -70,16 +72,24 @@ function AnalogClock(props) {
     'x2': parseInt(cc.cx, 10) + hourRadius * Math.sin(hourAngle),
     'y2': parseInt(cc.cy, 10) - hourRadius * Math.cos(hourAngle)
   };
+  const textLocations = [...new Array(12).keys()].map(a => {
+    const time = a + 1;
+    const x = numberXAdjust + parseInt(cc.cx, 10) + numberRadius * Math.sin(2 * Math.PI * time / 12);
+    const y = numberYAdjust + parseInt(cc.cy, 10) - numberRadius * Math.cos(2 * Math.PI * time / 12);
+    return (
+      <text x={x} y={y} fill="red">{time}</text>
+    )
+  });
 
   return (
-    <svg width="100" height="100">
+    <svg width="155" height="155">
       <circle
         cx={cc.cx}
         cy={cc.cy}
         r={cc.radius}
         stroke="green"
         strokeWidth="4"
-        fill="yellow"/>
+        fill="yellow"/> {textLocations.map(i => (i))}
       <line
         x1={hourNiddle.x1}
         y1={hourNiddle.y1}
