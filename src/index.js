@@ -21,15 +21,13 @@ function LocalTime(props) {
   )
 }
 function AnalogClock(props) {
-  const secondsAngle = 2 * Math.PI * props
-    .date
-    .getSeconds() / 60;
-  const minutesAngle = 2 * Math.PI * props
-    .date
-    .getMinutes() / 60;
-  const hourAngle = 2 * Math.PI * props
-    .date
-    .getHours() / 12;
+  const currentDatetime = props.timeZone? props.date.toLocaleTimeString('en-US', {timeZone: props.timeZone}): props.date.toLocaleTimeString();
+  const timeSplit = currentDatetime.split(' ')[0].split(':');
+  const isAM = currentDatetime.split(' ')[1] === 'AM';
+  const secondsAngle = 2 * Math.PI * timeSplit[2] / 60;
+  const minutesAngle = 2 * Math.PI * timeSplit[1] / 60;
+  const hourAngle = 2 * Math.PI * timeSplit[0] / 12;
+
   const lineStyleSeconds = {
     'stroke': 'rgb(255,0,0)',
     'strokeWidth': '2'
@@ -89,7 +87,7 @@ function AnalogClock(props) {
         r={cc.radius}
         stroke="green"
         strokeWidth="4"
-        fill="yellow"/> {textLocations.map(i => (i))}
+        fill={isAM? "yellow": "rgb(51, 102, 153)"}/> {textLocations.map(i => (i))}
       <line
         x1={hourNiddle.x1}
         y1={hourNiddle.y1}
@@ -134,7 +132,8 @@ class Clock extends React.Component {
         <div>Welcome to my clock</div>
         <LocalTime date={this.state.date}/>
         <KathmanduTime date={this.state.date}/>
-        <AnalogClock date={this.state.date}/>
+        <AnalogClock date={this.state.date} />
+        <AnalogClock date={this.state.date} timeZone='Asia/Kathmandu'/>
       </div>
     );
   }
